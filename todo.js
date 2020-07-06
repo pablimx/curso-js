@@ -4,8 +4,10 @@ var listElement = document.querySelector("#app ul");
 var inputElement = document.querySelector("#app input");
 var buttonElement = document.querySelector("#app button");
 
-//Array inicial contendo os todos
-var todos = ["Acordar", "Escovar os dentes", "Trabalhar"];
+//Removendo o array inicial e acessando o local storage
+//Utilizando o JSON para transformar de volta no array
+//Se não houver a lista de ToDos será carregado um novo array
+var todos = JSON.parse(localStorage.getItem("list_todos")) || [];
 
 //Função para renderizar todos
 function renderTodos() {
@@ -56,6 +58,9 @@ function addTodo() {
   inputElement.value = "";
   //Renderizar todos novamente
   renderTodos();
+  //Utilizando a função saveToStorage nos 2 locais que alteram
+  //os valores dos ToDos (adicionar e excluir)
+  saveToStorage();
 }
 
 //Função para adicionar ao clicar no botão
@@ -67,4 +72,17 @@ function deleteTodo(position) {
   //baseado na posição informada. Nesse caso será removido 1 elemento
   todos.splice(position, 1);
   renderTodos();
+  //Utilizando a função saveToStorage nos 2 locais que alteram
+  //os valores dos ToDos (adicionar e excluir)
+  saveToStorage();
+}
+
+//Função para salvar a lista dos Todos no armazenamento local
+function saveToStorage() {
+  //A variável localStorage é Global e a propriedade setItem
+  //é para darmos o nome que desejarmos e qual a variável
+  //porém ele não armazena vetores e armazena apenas uma chave
+  //no formato de valor e string, por isso iremos utilizar JSON
+  //Assim será transformado o vetor em string
+  localStorage.setItem("list_todos", JSON.stringify(todos));
 }
